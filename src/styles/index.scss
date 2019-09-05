@@ -1,4 +1,8 @@
 @import 'variables.css';
+@import 'weather-icons.min.css';
+@import 'font-awesome.min.css';
+@import 'icon.css';
+
 
 
 :root{
@@ -7,12 +11,163 @@
     box-sizing: border-box;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -2;
 }
 
+.container{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.app{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 8px;
+}
+
+
+
+.search-container {
+    float: right;
+  }
+  
+  input[type=text] {
+    padding: 6px;
+    border-radius: 5px 0px 0px 0px;
+    font-size: 17px;
+    border: none;
+  }
+  
+  .search-container button {
+    float: right;
+    padding: 6px 10px;
+    /* margin-right: 16px; */
+    background: #ddd;
+    background-color: #ffffff;
+    font-size: 17px;
+    border: none;
+    cursor: pointer;
+    border-radius: 0px 5px 0px 0px;
+  }
+  
+  .search-container button:hover {
+    background: #ccc;
+  }
+
+
+.weather {
+    /* padding: 10px; */
+    text-align: center;
+    /* border-radius: 10px; */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    display: flex;
+    flex-direction: column;
+    width: 263.797px;
+    background-color: rgb(244, 249, 255);
+}
+
+.weather_current{
+    padding: 10px;
+    display: grid;
+}
+
+.weather_next{
+    margin: 10px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    font-size: 1.6rem;
+}
+
+
+.wi {
+    line-height: 1.4;
+    *padding: 15px;
+    
+    
+}
+.icon{
+    font-size: 6rem;
+}
+#temp{
+    font-size: 3rem;
+    font-weight: 600;
+}
+#location_name{
+    font-size: 1rem;
+    width: 250px;
+}
+.weatherText{
+    font-size: 2rem;
+    width: 250px;
+}
+
+#wind, #pressure, #precipitation{
+    display: grid;
+}
+
+
+
+.nav{
+    display: inline-block;
+    text-align: center;
+}
+.nav button{
+    padding: 0.3em 1.2em;
+    margin: 0 0.3em 0.3em 0;
+    border: solid black 1px;
+    border-radius: 0.2em;
+    background-color: #4eb5f1;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.2s;
+}
+.nav button:hover{
+    background-color:#4095c6;
+    }
+
+
+#del{
+    border: solid black 1px;
+    border-radius: 0.2em;
+    background-color:#c64040;
+    text-decoration: none;
+}
+#del:hover{
+    background-color:#c77f7f;
+}
+
+
+#add button{
+    border: 0px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    text-decoration: none;
+    font-size: 5rem;
+    height: 80px;
+    width: 80px; 
+    padding: 0px;
+}
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
 }
-

@@ -2,8 +2,9 @@ let ApiKey;
 // ApiKey = 'MGvG0TzQVeBUgVYcA19kvGzGFroIG5bE'
 // ApiKey = 'Qp6zt8Bwf5C5lSqdGCvD391l6GFK6y86'
 // ApiKey = 'ZGEkMBJgYT8Fw5Qwqu3HEAWQDVWIy7X4'
-ApiKey = 'Rib2PskNkkA8UXpG2ept9F9AqPuQJFCk'
-// ApiKey = 'NtUz5TWNyqhAdjIClkFboMYd1o2WG4LP'
+// ApiKey = 'Rib2PskNkkA8UXpG2ept9F9AqPuQJFCk'
+ApiKey = 'NtUz5TWNyqhAdjIClkFboMYd1o2WG4LP'
+ApiKey = 'n5Tjnk2Sk8sexN0K2E9jMXpnfrjPG8wg'
 const axios = require('axios');
 
 function updateApp(id, cityName, data){
@@ -25,15 +26,15 @@ function updateApp(id, cityName, data){
     realtemp.innerText = "RealTemp: " + data.RealFeelTemperature.Metric.Value + "°C"
 
     pressure.innerHTML = `<i class="wi wi-barometer"></i>`;
-    pressure.innerHTML += data.Pressure.Metric.Value + "hPa";
+    pressure.innerHTML += data.Pressure.Metric.Value + "<br>hPa";
 
     let deg = data.Wind.Direction.Degrees;
 
     wind.innerHTML = `<i class="wi wi-wind-direction"style="transform: rotate(${deg}deg);"></i>`
-    wind.innerHTML += data.Wind.Speed.Metric.Value + "km/h";
+    wind.innerHTML += data.Wind.Speed.Metric.Value + "<br>km/h";
 
     precipitation.innerHTML = `<i class="wi wi-umbrella" ></i>`;
-    precipitation.innerHTML += data.PrecipitationSummary.Precipitation.Metric.Value;
+    precipitation.innerHTML += data.PrecipitationSummary.Precipitation.Metric.Value + "<br>mm";
 
     
     // let newIconUrl = `./assets/icon/${data.WeatherIcon}-s.png`

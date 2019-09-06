@@ -15,10 +15,20 @@
 body {
     margin: 0;
     padding: 0;
+
+    z-index: -2;
     background-image: url('../images/background.jpg');
     background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
     background-size: cover;
-    z-index: -2;
+}
+@media only screen and (max-width: 600px) {
+    body {
+        background-image: url('../images/background-v.jpg');
+        background-position: top center;
+        background-size: auto;
+    }
 }
 
 .container{

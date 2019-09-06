@@ -1,149 +1,101 @@
 
 const axios = require('axios');
-const ApiKey = require('./config').ApiKey
-
-
-function showError(id){
-    id = "#" + id + " ";
-    temp = document.querySelector(id +"#temp");
-    temp.innerText = "Error with API"
-
-    weatherText = document.querySelector(id +"#weatherText");
-    pressure = document.querySelector(id +"#pressure");
-    wind = document.querySelector(id +"#wind");
-    icon = document.querySelector(id +"#icon")
-    location_name = document.querySelector(id +"#location_name")
-    precipitation = document.querySelector(id +"#precipitation")
-    realtemp = document.querySelector(id +"#realtemp")
-
-    location_name.innerText = "";
-    weatherText.innerText = "";
-    realtemp.innerText = "";
-    pressure.innerHTML = "";
-    wind.innerHTML = "";
-    precipitation.innerHTML = "";
-
-}
-
-function showWelcome(id){
-    id = "#" + id + " ";
-    temp = document.querySelector(id +"#temp");
-    temp.innerText = "Please input city name"
-
-    weatherText = document.querySelector(id +"#weatherText");
-    pressure = document.querySelector(id +"#pressure");
-    wind = document.querySelector(id +"#wind");
-    icon = document.querySelector(id +"#icon")
-    location_name = document.querySelector(id +"#location_name")
-    precipitation = document.querySelector(id +"#precipitation")
-    realtemp = document.querySelector(id +"#realtemp")
-
-    location_name.innerText = "";
-    weatherText.innerText = "";
-    realtemp.innerText = "";
-    pressure.innerHTML = "";
-    wind.innerHTML = "";
-    precipitation.innerHTML = "";
-
-}
-
-function getWeather(key){
-    const currentConditionUrl = `http://dataservice.accuweather.com/currentconditions/v1/${key}?apikey=${ApiKey}&language=pl&details=true`;
-    return axios.get(currentConditionUrl);
-}
+const ApiKey = require('./config').ApiKey;
+const templateApp = require('./template').templateApp;
 
 class App {
+
     constructor(id) {
         this.id = id;
         this.city;
-        this.dom = document.getElementById(id) || App.addElement(id);
+        this.dom = document.getElementById(id) || App.addNewDivInHTML(id);
+
         this.searchbutton = document.querySelector("#" + id +" button");
-        this.searchbutton.addEventListener('click',this.setCity.bind(this));
+        this.searchbutton.addEventListener('click',this.setCityFromInput.bind(this));
         this.refreshbutton = document.querySelector("#" + id +" #refresh");
-        this.refreshbutton.addEventListener('click',this.updateData.bind(this));
+        this.refreshbutton.addEventListener('click',this.getWeatherData.bind(this));
     }
-
-    static addElement(id)
-    {
-      let newDiv = document.createElement("div");
-      newDiv.id = id;
-      newDiv.className = "app";
-      newDiv.innerHTML = app_data;
     
-      document.querySelector(".container").insertBefore(newDiv,document.querySelector("#add"));
-      
-      return document.getElementById(id);
-    }
+    async setCityFromInput(e){
 
-    async setCity(e){
         e.preventDefault()
         this.city = await document.querySelector("#" + this.id+ " input").value;
-        await this.getkey();
-        this.updateData();
+        await this.getCityKey();
+        await this.getWeatherData();
         
     }
+    
+    async getCityKey(){
 
-    async getkey(){
         const citySearchUrl = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${ApiKey}&q=${this.city}&language=pl`;
-        let data = await axios.get(citySearchUrl)
+
+        let responseData = await axios.get(citySearchUrl)
          .then(function (response) {
-            // handle success
+             // handle success
             return response.data[0]
         })
         .catch(function (error) {
             // handle error
-            console.log(error);
             return undefined;
         });
-        await console.log(data);
-        this.keyCity = await data.Key;
-        this.nameCity = data.LocalizedName;
-        this.country = data.Country.LocalizedName
+
+        if (responseData != undefined){
+            await console.log(responseData);
+            this.keyCity = await responseData.Key;
+            this.nameCity = responseData.LocalizedName;
+            this.country = responseData.Country.LocalizedName
+        }
     }
+    
+    async getWeatherData(){
 
-    async updateData(){
-
+        const currentConditionUrl = `http://dataservice.accuweather.com/currentconditions/v1/${this.keyCity}?apikey=${ApiKey}&language=pl&details=true`; 
         
-        console.log(this.keyCity);
         if (this.keyCity != undefined){
+            this.weatherData = await axios.get(currentConditionUrl)
+            .then(function (response) {
+                // handle success
+                return response.data[0]
+            })
+            .catch(function (error) {
+                // handle error
+                return undefined;
+            });
+            await this.updateHTML();
+            await this.saveAppToLocalStorage();
 
-        
-        this.weather = await getWeather(this.keyCity);
-        this.weather = this.weather.data[0];
-        console.log(this.weather);
-        await this.updateApp();
+        }else{
+
+            this.showErrorInHTML();
         }
-        else{
-            showError(this.id);
-        }
-        this.save();
     }
 
-    removeApp(){
+    removeAppFromHTML(){
+
         var element = document.getElementById(this.id);
         element.parentNode.removeChild(element);
     }
 
-    save(){
+    saveAppToLocalStorage(){
         localStorage[this.id] = JSON.stringify(this);
         }
-
-    load(){
-
+        
+    loadAppFromLocalStorage(){
+            
         if (localStorage[this.id] != undefined){
             app = JSON.parse(localStorage[this.id]);
             this.city = app.city;
             this.keyCity = app.keyCity;
             this.nameCity = app.nameCity;
             this.country = app.country;
-
-            this.updateData();
+            
+            this.getWeatherData();
         }
     }
 
-    updateApp(){//this.id, this.city, this.weather    this.nameCity   this.country 
+    updateHTML(){ 
         let id = "#" + this.id + " ";
-        let data = this.weather 
+        let data = this.weatherData 
         let temp = document.querySelector(id +"#temp");
         let weatherText = document.querySelector(id +"#weatherText");
         let pressure = document.querySelector(id +"#pressure");
@@ -157,64 +109,63 @@ class App {
         location_name.innerText = this.nameCity + ", " + this.country ;
         temp.innerText = data.Temperature.Metric.Value + "°C";
         weatherText.innerText = data.WeatherText;
-    
+        
         realtemp.innerText = "RealTemp: " + data.RealFeelTemperature.Metric.Value + "°C"
-    
+        
         pressure.innerHTML = `<i class="wi wi-barometer"></i>`;
         pressure.innerHTML += data.Pressure.Metric.Value + "<br>hPa";
-    
+        
         let deg = data.Wind.Direction.Degrees;
-    
+        
         wind.innerHTML = `<i class="wi wi-wind-direction"style="transform: rotate(${deg}deg);"></i>`
         wind.innerHTML += data.Wind.Speed.Metric.Value + "<br>km/h";
-    
+        
         precipitation.innerHTML = `<i class="wi wi-umbrella" ></i>`;
         precipitation.innerHTML += data.PrecipitationSummary.Precipitation.Metric.Value + "<br>mm";
-    
+        
         
         // let newIconUrl = `./assets/icon/${data.WeatherIcon}-s.png`
         let nr = 2;
         nr = nr>10 ? `${nr}` : `0${nr}`
         icon.innerHTML = `<i class="wi icon-accu${nr} icon"></i>`
+        
+        
+    }
     
+    showErrorInHTML(){
+        id = "#" + this.id + " ";
+        temp = document.querySelector(id +"#temp");
+        temp.innerText = "Error with API"
     
+        weatherText = document.querySelector(id +"#weatherText");
+        pressure = document.querySelector(id +"#pressure");
+        wind = document.querySelector(id +"#wind");
+        icon = document.querySelector(id +"#icon")
+        location_name = document.querySelector(id +"#location_name")
+        precipitation = document.querySelector(id +"#precipitation")
+        realtemp = document.querySelector(id +"#realtemp")
+    
+        location_name.innerText = "";
+        weatherText.innerText = "";
+        realtemp.innerText = "";
+        pressure.innerHTML = "";
+        wind.innerHTML = "";
+        precipitation.innerHTML = "";
+    
+    }
+
+    static addNewDivInHTML(id)
+    {
+        let newDiv = document.createElement("div");
+        newDiv.id = id;
+        newDiv.className = "app";
+        newDiv.innerHTML = templateApp;
+    
+        document.querySelector(".container").insertBefore(newDiv,document.querySelector("#add"));
+        
+        return document.getElementById(id);
     }
     
 }
 
 module.exports.App = App;
-
-
-app_data = ` <div class="search-container">
-<form action="/action_page.php">
-    <input type="text" placeholder="Search.." name="search">
-    <button type="submit"><i class="fa fa-search"></i></button>
-</form>
-</div>
-
-
-<div class="weather">
-
-<div class="weather_current">
-<span id="icon"></span>
-<span id="temp">Please input city name</span>
-<span id="realtemp"></span>
-<span id="location_name"></span>
-<span id="weatherText" ></span>
-</div>
-<div class="weather_detail">
-<span id="pressure" ></span>
-<span id="wind" ></span>
-<span id="precipitation"></i></span>
-</div>
-</div>
-<div class="nav">
-<button id="button1">Teraz</button>
-<button id="button2">Prognoza</button>
-<button id="button3">Zmień</button>
-</div>
-<div class="del">
-<button id="refresh"><i class="fa fa-refresh"></i></button>
-<button id="del"><i class="fa fa-close"></i></button>
-</div>`
-

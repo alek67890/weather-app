@@ -1,63 +1,60 @@
-
 const apps = require('./apps');
 
 
 class Page {
+
     constructor() {
+
         this.listApp = {};
-        this.delbutton = {};
+        this.deleteButton = {};
     }
 
-    async addPage(id){
+    async addApp(id){
+
          this.listApp[id] = await new apps.App(id);
-         this.delbutton[id] = await document.querySelector("#" + id +" #del");
-         this.delbutton[id].addEventListener('click',this.remove.bind(this));
-         this.save();
-
+         this.deleteButton[id] = await document.querySelector("#" + id +" #del");
+         this.deleteButton[id].addEventListener('click',this.deleteButtonHandler.bind(this));
+         this.savePageToLocalStorage();
     }
 
-    async removePage(id){
-        await this.listApp[id].removeApp(); 
+    async removeAppFromPage(id){
+
+        await this.listApp[id].removeAppFromHTML(); 
         await delete this.listApp[id] ;
-        await this.save();
+        await this.savePageToLocalStorage();
     }
 
-    newID(){
+    getFreeID(){
+
+        //NO CHECK FOR TO MENY APP
         let id;
         do 
-        id = Math.floor(Math.random() * 100)
-        while(this.listApp.hasOwnProperty(id)) ;
-        return "app" + id;
+            id = "app" + Math.floor(Math.random() * 100);
+        while(this.listApp.hasOwnProperty(id));
+        return id;
     }
 
-    remove(e){
-        console.log(e.target.offsetParent.id)
-        console.log("----------------------")
-        console.log(this)
+    deleteButtonHandler(e){
+
         delete localStorage[e.target.offsetParent.id]
-        this.removePage(e.target.offsetParent.id);
-        
-
+        this.removeAppFromPage(e.target.offsetParent.id);
     }
 
 
-    save(){
-        
-    localStorage["pages"] = JSON.stringify(this);
+    savePageToLocalStorage(){
 
+        localStorage["pages"] = JSON.stringify(this);
     }
 
-    async load(){
+    async loadFromLocalStorage(){
 
-        page = await JSON.parse(localStorage.getItem("pages"));
-        for(let i in page.listApp){
-            await this.addPage(i);
-            await this.listApp[i].load();
+        let new_page = await JSON.parse(localStorage.getItem("pages"));
+        for(let i in new_page.listApp){
+            await this.addApp(i);
+            await this.listApp[i].loadAppFromLocalStorage();
         }
-
     }
 }
-
 
 
 module.exports.Page = Page;

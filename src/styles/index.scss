@@ -1,9 +1,6 @@
-@import 'variables.css';
 @import 'icon.css';
 @import 'weather-icons.min.css';
 @import 'font-awesome.min.css';
-
-
 
 
 :root{
@@ -15,7 +12,6 @@
 body {
     margin: 0;
     padding: 0;
-
     z-index: -2;
     background-image: url('../images/background.jpg');
     background-repeat: no-repeat;
@@ -52,33 +48,32 @@ body {
 }
 
 
-
 .search-container {
     float: right;
-  }
+}
   
-  input[type=text] {
-    padding: 6px;
-    border-radius: 5px 0px 0px 0px;
-    font-size: 17px;
-    border: none;
-  }
-  
-  .search-container button {
-    float: right;
-    padding: 6px 10px;
-    /* margin-right: 16px; */
-    background: #ddd;
-    background-color: #ffffff;
-    font-size: 17px;
-    border: none;
-    cursor: pointer;
-    border-radius: 0px 5px 0px 0px;
-  }
-  
-  .search-container button:hover {
-    background: #ccc;
-  }
+input[type=text] {
+padding: 6px;
+border-radius: 5px 0px 0px 0px;
+font-size: 17px;
+border: none;
+}
+
+.search-container button {
+float: right;
+padding: 6px 10px;
+/* margin-right: 16px; */
+background: #ddd;
+background-color: #ffffff;
+font-size: 17px;
+border: none;
+cursor: pointer;
+border-radius: 0px 5px 0px 0px;
+}
+
+.search-container button:hover {
+background: #ccc;
+}
 
 
 .weather {
@@ -134,8 +129,6 @@ body {
     display: grid;
 }
 
-
-
 .nav{
     // display: inline-block;      
     display: none;
@@ -167,8 +160,6 @@ body {
 }
 
 
-
-
 #add button{
     border: 0px;
     border-radius: 5px;
@@ -180,12 +171,8 @@ body {
     padding: 0px;
 }
 
-// *,
-// *::before,
-// *::after {
-//     box-sizing: border-box;
-// }
-
-.icon-accu02::before{
-    content: "\f002";
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }

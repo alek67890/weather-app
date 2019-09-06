@@ -1,6 +1,6 @@
 /* accuweather icons */
 .icon-accu01:before {content: "\f00d";}
-.icon-accu02:before {content: "\f002";}
+.icon-accu02::before {content: "\f002";}
 .icon-accu03:before {content: "\f002";}
 .icon-accu04:before {content: "\f07d";}
 .icon-accu05:before {content: "\f003";}

@@ -1,7 +1,8 @@
 @import 'variables.css';
+@import 'icon.css';
 @import 'weather-icons.min.css';
 @import 'font-awesome.min.css';
-@import 'icon.css';
+
 
 
 
@@ -166,8 +167,12 @@ body {
     padding: 0px;
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
+// *,
+// *::before,
+// *::after {
+//     box-sizing: border-box;
+// }
+
+.icon-accu02::before{
+    content: "\f002";
 }

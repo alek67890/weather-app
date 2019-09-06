@@ -45,9 +45,6 @@ module.exports = {
         output: { comments: false }
       }
     }),
-    new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true })
-    })
   ],
 
   module: {

@@ -1,14 +1,4 @@
-const City = document.getElementById("city")
-const submitButton = document.getElementById("submit")
-
-const ApiKey = 'MGvG0TzQVeBUgVYcA19kvGzGFroIG5bE'
-
-const axios = require('axios');
-
 const pages = require('./pages');
-
-
-
 
 async function updatePage(){
     

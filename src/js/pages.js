@@ -12,12 +12,14 @@ class Page {
          this.listApp[id] = await new apps.App(id);
          this.delbutton[id] = await document.querySelector("#" + id +" #del");
          this.delbutton[id].addEventListener('click',this.remove.bind(this));
+         this.save();
 
     }
 
     async removePage(id){
         await this.listApp[id].removeApp(); 
         await delete this.listApp[id] ;
+        await this.save();
     }
 
     newID(){
@@ -33,6 +35,23 @@ class Page {
         console.log("----------------------")
         console.log(this)
         this.removePage(e.target.offsetParent.id);
+    }
+
+
+    save(){
+        
+    localStorage["pages"] = JSON.stringify(this);
+
+    }
+
+    async load(){
+
+        page = await JSON.parse(localStorage.getItem("pages"));
+        for(let i in page.listApp){
+            await this.addPage(i);
+            await this.listApp[i].load();
+        }
+
     }
 }
 

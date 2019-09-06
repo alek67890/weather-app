@@ -2,43 +2,7 @@
 const axios = require('axios');
 const ApiKey = require('./config').ApiKey
 
-function updateApp(id, cityName, data){
-    id = "#" + id + " ";
-    temp = document.querySelector(id +"#temp");
-    weatherText = document.querySelector(id +"#weatherText");
-    pressure = document.querySelector(id +"#pressure");
-    wind = document.querySelector(id +"#wind");
-    icon = document.querySelector(id +"#icon")
-    location_name = document.querySelector(id +"#location_name")
-    precipitation = document.querySelector(id +"#precipitation")
-    realtemp = document.querySelector(id +"#realtemp")
-    
-    
-    location_name.innerText = cityName + ", Polska";
-    temp.innerText = data.Temperature.Metric.Value + "°C";
-    weatherText.innerText = data.WeatherText;
 
-    realtemp.innerText = "RealTemp: " + data.RealFeelTemperature.Metric.Value + "°C"
-
-    pressure.innerHTML = `<i class="wi wi-barometer"></i>`;
-    pressure.innerHTML += data.Pressure.Metric.Value + "<br>hPa";
-
-    let deg = data.Wind.Direction.Degrees;
-
-    wind.innerHTML = `<i class="wi wi-wind-direction"style="transform: rotate(${deg}deg);"></i>`
-    wind.innerHTML += data.Wind.Speed.Metric.Value + "<br>km/h";
-
-    precipitation.innerHTML = `<i class="wi wi-umbrella" ></i>`;
-    precipitation.innerHTML += data.PrecipitationSummary.Precipitation.Metric.Value + "<br>mm";
-
-    
-    // let newIconUrl = `./assets/icon/${data.WeatherIcon}-s.png`
-    let nr = 2;
-    nr = nr>10 ? `${nr}` : `0${nr}`
-    icon.innerHTML = `<i class="wi icon-accu${nr} icon"></i>`
-
-
-}
 function showError(id){
     id = "#" + id + " ";
     temp = document.querySelector(id +"#temp");
@@ -96,7 +60,7 @@ class App {
         this.searchbutton = document.querySelector("#" + id +" button");
         this.searchbutton.addEventListener('click',this.setCity.bind(this));
         this.refreshbutton = document.querySelector("#" + id +" #refresh");
-        this.refreshbutton.addEventListener('click',this.updateApp.bind(this));
+        this.refreshbutton.addEventListener('click',this.updateData.bind(this));
     }
 
     static addElement(id)
@@ -115,26 +79,29 @@ class App {
         e.preventDefault()
         this.city = await document.querySelector("#" + this.id+ " input").value;
         await this.getkey();
-        this.updateApp();
+        this.updateData();
         
     }
 
     async getkey(){
         const citySearchUrl = `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${ApiKey}&q=${this.city}&language=pl`;
-        this.keyCity = await axios.get(citySearchUrl)
+        let data = await axios.get(citySearchUrl)
          .then(function (response) {
             // handle success
-            return response.data[0].Key
+            return response.data[0]
         })
         .catch(function (error) {
             // handle error
             console.log(error);
             return undefined;
         });
-
+        await console.log(data);
+        this.keyCity = await data.Key;
+        this.nameCity = data.LocalizedName;
+        this.country = data.Country.LocalizedName
     }
 
-    async updateApp(){
+    async updateData(){
 
         
         console.log(this.keyCity);
@@ -144,7 +111,7 @@ class App {
         this.weather = await getWeather(this.keyCity);
         this.weather = this.weather.data[0];
         console.log(this.weather);
-        await updateApp(this.id, this.city, this.weather);
+        await this.updateApp();
         }
         else{
             showError(this.id);
@@ -167,8 +134,50 @@ class App {
             app = JSON.parse(localStorage[this.id]);
             this.city = app.city;
             this.keyCity = app.keyCity;
-            this.updateApp();
+            this.nameCity = app.nameCity;
+            this.country = app.country;
+
+            this.updateData();
         }
+    }
+
+    updateApp(){//this.id, this.city, this.weather    this.nameCity   this.country 
+        let id = "#" + this.id + " ";
+        let data = this.weather 
+        let temp = document.querySelector(id +"#temp");
+        let weatherText = document.querySelector(id +"#weatherText");
+        let pressure = document.querySelector(id +"#pressure");
+        let wind = document.querySelector(id +"#wind");
+        let icon = document.querySelector(id +"#icon")
+        let location_name = document.querySelector(id +"#location_name")
+        let precipitation = document.querySelector(id +"#precipitation")
+        let realtemp = document.querySelector(id +"#realtemp")
+        
+        
+        location_name.innerText = this.nameCity + ", " + this.country ;
+        temp.innerText = data.Temperature.Metric.Value + "°C";
+        weatherText.innerText = data.WeatherText;
+    
+        realtemp.innerText = "RealTemp: " + data.RealFeelTemperature.Metric.Value + "°C"
+    
+        pressure.innerHTML = `<i class="wi wi-barometer"></i>`;
+        pressure.innerHTML += data.Pressure.Metric.Value + "<br>hPa";
+    
+        let deg = data.Wind.Direction.Degrees;
+    
+        wind.innerHTML = `<i class="wi wi-wind-direction"style="transform: rotate(${deg}deg);"></i>`
+        wind.innerHTML += data.Wind.Speed.Metric.Value + "<br>km/h";
+    
+        precipitation.innerHTML = `<i class="wi wi-umbrella" ></i>`;
+        precipitation.innerHTML += data.PrecipitationSummary.Precipitation.Metric.Value + "<br>mm";
+    
+        
+        // let newIconUrl = `./assets/icon/${data.WeatherIcon}-s.png`
+        let nr = 2;
+        nr = nr>10 ? `${nr}` : `0${nr}`
+        icon.innerHTML = `<i class="wi icon-accu${nr} icon"></i>`
+    
+    
     }
     
 }
@@ -193,7 +202,7 @@ app_data = ` <div class="search-container">
 <span id="location_name"></span>
 <span id="weatherText" ></span>
 </div>
-<div class="weather_next">
+<div class="weather_detail">
 <span id="pressure" ></span>
 <span id="wind" ></span>
 <span id="precipitation"></i></span>

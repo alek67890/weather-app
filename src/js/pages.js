@@ -34,7 +34,10 @@ class Page {
         console.log(e.target.offsetParent.id)
         console.log("----------------------")
         console.log(this)
+        delete localStorage[e.target.offsetParent.id]
         this.removePage(e.target.offsetParent.id);
+        
+
     }
 
 

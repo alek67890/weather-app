@@ -156,7 +156,7 @@ body {
     }
 
 
-#del{
+#refresh, #del{
     border: solid black 1px;
     border-radius: 0.2em;
     background-color:#c64040;
@@ -165,6 +165,8 @@ body {
 #del:hover{
     background-color:#c77f7f;
 }
+
+
 
 
 #add button{

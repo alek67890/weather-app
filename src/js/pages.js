@@ -5,13 +5,13 @@ const apps = require('./apps');
 class Page {
     constructor() {
         this.listApp = {};
-        this.button = {};
+        this.delbutton = {};
     }
 
     async addPage(id){
          this.listApp[id] = await new apps.App(id);
-         this.button[id] = await document.querySelector("#" + id +" #del");
-         this.button[id].addEventListener('click',this.remove.bind(this));
+         this.delbutton[id] = await document.querySelector("#" + id +" #del");
+         this.delbutton[id].addEventListener('click',this.remove.bind(this));
 
     }
 

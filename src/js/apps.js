@@ -108,19 +108,19 @@ class App {
     {
       let newDiv = document.createElement("div");
       newDiv.id = id;
-      newDiv.className = "app"
+      newDiv.className = "app";
       newDiv.innerHTML = app_data;
     
       document.querySelector(".container").insertBefore(newDiv,document.querySelector("#add"));
       
-      return document.getElementById(id)
+      return document.getElementById(id);
     }
 
     async setCity(e){
         e.preventDefault()
         this.city = await document.querySelector("#" + this.id+ " input").value;
         await this.getkey();
-        this.updateApp()
+        this.updateApp();
         
     }
 
@@ -140,8 +140,9 @@ class App {
     }
 
     async updateApp(){
+
         
-        console.log(this.keyCity)
+        console.log(this.keyCity);
         if (this.keyCity != undefined){
 
         
@@ -151,13 +152,28 @@ class App {
         await updateApp(this.id, this.city, this.weather);
         }
         else{
-            showError(this.id)
+            showError(this.id);
         }
+        this.save();
     }
 
     removeApp(){
         var element = document.getElementById(this.id);
         element.parentNode.removeChild(element);
+    }
+
+    save(){
+        localStorage[this.id] = JSON.stringify(this);
+        }
+
+    load(){
+
+        if (localStorage[this.id] != undefined){
+            app = JSON.parse(localStorage[this.id]);
+            this.city = app.city;
+            this.keyCity = app.keyCity;
+            this.updateApp();
+        }
     }
     
 }

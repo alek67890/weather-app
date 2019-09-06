@@ -2,8 +2,8 @@ let ApiKey;
 // ApiKey = 'MGvG0TzQVeBUgVYcA19kvGzGFroIG5bE'
 // ApiKey = 'Qp6zt8Bwf5C5lSqdGCvD391l6GFK6y86'
 // ApiKey = 'ZGEkMBJgYT8Fw5Qwqu3HEAWQDVWIy7X4'
-// ApiKey = 'Rib2PskNkkA8UXpG2ept9F9AqPuQJFCk'
-ApiKey = 'NtUz5TWNyqhAdjIClkFboMYd1o2WG4LP'
+ApiKey = 'Rib2PskNkkA8UXpG2ept9F9AqPuQJFCk'
+// ApiKey = 'NtUz5TWNyqhAdjIClkFboMYd1o2WG4LP'
 const axios = require('axios');
 
 function updateApp(id, cityName, data){
@@ -99,6 +99,8 @@ class App {
         this.dom = document.getElementById(id) || App.addElement(id);
         this.searchbutton = document.querySelector("#" + id +" button");
         this.searchbutton.addEventListener('click',this.setCity.bind(this));
+        this.refreshbutton = document.querySelector("#" + id +" #refresh");
+        this.refreshbutton.addEventListener('click',this.updateApp.bind(this));
     }
 
     static addElement(id)
@@ -191,6 +193,7 @@ app_data = ` <div class="search-container">
 <button id="button3">Zmień</button>
 </div>
 <div class="del">
-<button id="del">X</button>
+<button id="refresh"><i class="fa fa-refresh"></i></button>
+<button id="del"><i class="fa fa-close"></i></button>
 </div>`
 

@@ -12,3 +12,7 @@ TO-DO List
 Live version
 -------------------------
 Live version [here](http://grzelak.it/weather-app/)
+
+Screenshot
+-------------------------
+![alternatywny tekst](/screenshot.png "Tytuł")

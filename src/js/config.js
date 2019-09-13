@@ -1,3 +1,3 @@
-let ApiKey = 'ZGEkMBJgYT8Fw5Qwqu3HEAWQDVWIy7X4'
+let ApiKey = 'NtUz5TWNyqhAdjIClkFboMYd1o2WG4LP'
 
-module.exports.ApiKey = ApiKey;
+export {ApiKey}

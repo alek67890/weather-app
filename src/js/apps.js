@@ -1,7 +1,6 @@
-
-const axios = require('axios');
-const ApiKey = require('./config').ApiKey;
-const templateApp = require('./template').templateApp;
+import axios from 'axios';
+import {ApiKey} from './config';
+import {templateApp} from './template';
 
 class App {
 
@@ -83,7 +82,7 @@ class App {
     loadAppFromLocalStorage(){
             
         if (localStorage[this.id] != undefined){
-            app = JSON.parse(localStorage[this.id]);
+            let app = JSON.parse(localStorage[this.id]);
             this.city = app.city;
             this.keyCity = app.keyCity;
             this.nameCity = app.nameCity;
@@ -167,5 +166,5 @@ class App {
     }
     
 }
+export {App as Apps}
 
-module.exports.App = App;

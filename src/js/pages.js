@@ -1,7 +1,6 @@
-const apps = require('./apps');
+import {Apps} from './apps';
 
-
-class Page {
+class Pages {
 
     constructor() {
 
@@ -11,7 +10,7 @@ class Page {
 
     async addApp(id){
 
-         this.listApp[id] = await new apps.App(id);
+         this.listApp[id] = await new Apps(id);
          this.deleteButton[id] = await document.querySelector("#" + id +" #del");
          this.deleteButton[id].addEventListener('click',this.deleteButtonHandler.bind(this));
          this.savePageToLocalStorage();
@@ -56,5 +55,5 @@ class Page {
     }
 }
 
-
-module.exports.Page = Page;
+export {Pages}
+// module.exports.pages = Pages;
